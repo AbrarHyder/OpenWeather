@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Weather</title>
+
+    <style>
+        #heading{
+            color:#99C4C8;
+            text-align: center;
+            margin-top: -55px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        
+        }
+
+        #container{
+            
+            width: 400px;
+            margin: 2% auto;
+            padding: 2%;
+            text-align: center;
+            color:#99C4C8;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+            
+            
+        }
+        #image{
+            width: 100%;
+            height: 300px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <img id = "image" src ="https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+    <h1 id = "heading"> Weather API</h1>
+
+    
+
+    <input type ="text" id = "city" placeholder="Enter the city name" />
+    <button onclick="getWeatherData()">SEARCH</button>
+    <div id="container">NAME OF THE CITY</div>
+
+    <script>
+        let container = document.getElementById("container");
+        let api_key = "ec92c5746740cf0e1d10e9298e70bf7f";
+
+        async function getWeatherData() {
+            try { 
+            let city = document.getElementById("city").value;
+
+            let res = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`
+            );
+
+            let data = await res.json();
+            console.log(data);
+            displayData(data);
+            }
+            catch(error) {
+                console.log(error);
+            }
+        }
+
+        function displayData(data) {
+            container.innerHTML="";
+
+            let weatherCard = document.createElement("div");
+
+            let name=document.createElement("p");
+            name.textContent = "City : " + data.name;
+
+            let temp=document.createElement("p");
+            temp.textContent = "Temperature : " + data.main.temp + " degree celcius";
+
+            let humidity=document.createElement("p");
+            humidity.textContent = "Humidity : " + data.main.humidity;
+
+            let pressure=document.createElement("p");
+            pressure.textContent = "Pressure : " + data.main.pressure;
+
+            let speed=document.createElement("p");
+            speed.textContent = "Wind Speed : " + data.wind.speed;
+
+            let timezone=document.createElement("p");
+            timezone.textContent = "Timezone : " + data.timezone;
+
+            let sunrise=document.createElement("p");
+            sunrise.textContent = "Sunrise : " + data.sys.sunrise;
+
+            let sunset=document.createElement("p");
+            sunset.textContent = "Sunset : " + data.sys.sunset;
+
+            // let description=document.createElement("p");
+            // description.textContent = "description : " + data.main.description;
+
+
+
+            weatherCard.append(name,temp,humidity,pressure,speed,timezone,sunrise,sunset);
+
+            let iframe = document.createElement("iframe");
+            iframe.src = `https://maps.google.com/maps?q=${data.name}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+            iframe.width = 400;
+            iframe.height = 250;
+
+            container.append(iframe, weatherCard)
+
+
+
+        }
+
+    </script>
+</body>
+</html>
